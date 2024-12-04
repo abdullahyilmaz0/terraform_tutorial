@@ -128,5 +128,5 @@ resource "aws_eip" "one" {
 }
 # Output the public IP address of the EC2 instance
 output "web_server_public_ip" {
-  value = aws_instance.web_server-instance.public_ip
+  value = aws_eip.one.public_ip
 }
