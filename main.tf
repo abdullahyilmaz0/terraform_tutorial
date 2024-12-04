@@ -12,11 +12,20 @@ resource "aws_vpc" "prod-vpc" {
 # Define a Subnet within the VPC
 resource "aws_subnet" "subnet-1" {
   vpc_id            = aws_vpc.prod-vpc.id
-  cidr_block        = "10.0.1.0/24"
+  cidr_block        = var.subnet_prefix[0].cidr_block
   availability_zone = "us-east-1a" # Bölgeyi ihtiyaca göre değiştirin
   #map_public_ip_on_launch = true
   tags = {
-    Name = "prod-subnet"
+    Name = var.subnet_prefix[0].name
+  }
+}
+resource "aws_subnet" "subnet-2" {
+  vpc_id            = aws_vpc.prod-vpc.id
+  cidr_block        = var.subnet_prefix[1].cidr_block
+  availability_zone = "us-east-1a" # Bölgeyi ihtiyaca göre değiştirin
+  #map_public_ip_on_launch = true
+  tags = {
+    Name = var.subnet_prefix[1].name
   }
 }
 resource "aws_route_table_association" "a" {
@@ -51,8 +60,8 @@ resource "aws_route_table" "prod-route-table" {
 
 # Create an EC2 instance (web server)
 resource "aws_instance" "web_server-instance" {
-  ami               = "ami-0453ec754f44f9a4a" # Ubuntu 18.04 AMI ID'si (bunu kendi bölgenize uygun olarak değiştirebilirsiniz)
-  instance_type     = "t2.micro"
+  ami           = "ami-0453ec754f44f9a4a" # Ubuntu 18.04 AMI ID'si (bunu kendi bölgenize uygun olarak değiştirebilirsiniz)
+  instance_type = "t2.micro"
   #subnet_id         = aws_subnet.subnet-1.id
   availability_zone = "us-east-1a"
   key_name          = "test_002" # SSH anahtarınızın ismi
