@@ -124,7 +124,7 @@ resource "aws_eip" "one" {
   domain                    = "vpc"
   network_interface         = aws_network_interface.web-server-nic.id
   associate_with_private_ip = "10.0.1.50"
-  depends_on                = [aws_internet_gateway.gw]
+  depends_on                = [aws_instance.web_server-instance]
 }
 # Output the public IP address of the EC2 instance
 output "web_server_public_ip" {
